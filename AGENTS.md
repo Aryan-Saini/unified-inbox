@@ -20,7 +20,7 @@ Convex agent skills for common tasks can be installed by running
 
 # What this project is
 
-A take-home assessment: search Gmail, Slack and the web from one place, and send
+Unified Inbox: search Gmail, Slack and the web from one place, and send
 replies only after an explicit confirm step. The adapter layer and the safe-send
 gate are the centerpiece — a standalone module with the UI as a pure consumer.
 
@@ -38,7 +38,7 @@ against one or the other in normal work:
 | Environment | Convex deployment | Notes |
 |---|---|---|
 | **dev** | `judicious-wildcat-326` | Day-to-day. `npx convex dev` pushes `convex/` on save and must stay running while developing. |
-| **deployed** (`prod`) | `scintillating-moose-307` | **The deployment being submitted** — what the graded deployed URL and its real Gmail/Slack OAuth point at. Push with `pnpm deploy:deployed`; `pnpm dev:deployed` runs Next locally against it. |
+| **deployed** (`prod`) | `scintillating-moose-307` | **The live deployment** — what the deployed URL and its real Gmail/Slack OAuth point at. Push with `pnpm deploy:deployed`; `pnpm dev:deployed` runs Next locally against it. |
 
 Convex only has the deployment *types* `dev` and `prod`, so the deployed
 deployment **is** the `prod` one and `--prod` targets it. That makes it Convex's

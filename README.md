@@ -4,7 +4,7 @@ Search Gmail, Slack and the web from one place.
 
 | | |
 | --- | --- |
-| **Deployed app** | **https://unified-inbox-assessment.vercel.app** — the graded URL, real Gmail and Slack OAuth, on Vercel |
+| **Deployed app** | **https://unified-inbox-assessment.vercel.app** — the live app, real Gmail and Slack OAuth, on Vercel |
 | **Demo video** | **https://www.youtube.com/watch?v=lyPEjSdJe1U** — a walkthrough of the product |
 | Frontend | Next.js 16 (App Router, Turbopack) + Tailwind 4 |
 | Backend, DB, scheduler, cron | Convex |
@@ -25,7 +25,7 @@ this README takes one of them:
 
 | Convex deployment | Base URL | Used by |
 | --- | --- | --- |
-| deployed | `https://scintillating-moose-307.convex.site` | The deployed Vercel app above. Use this to exercise the REST API against the submitted deployment |
+| deployed | `https://scintillating-moose-307.convex.site` | The deployed Vercel app above. Use this to exercise the REST API against the live deployment |
 | dev | `https://judicious-wildcat-326.convex.site` | Local and Codespaces. It is `NEXT_PUBLIC_CONVEX_SITE_URL` in `.env.local` |
 
 - [Reviewer login](#reviewer-login)
@@ -332,7 +332,7 @@ than by the browser.
 22 image with pnpm via corepack, runs a frozen `pnpm install` on create, and
 forwards port 3000.
 
-**[Create a Codespace on `main`](https://codespaces.new/Aryan-Saini/unified-inbox-assessment?ref=main)**
+**[Create a Codespace on `main`](https://codespaces.new/Aryan-Saini/unified-inbox?ref=main)**
 
 Use that direct link if GitHub does not show the Codespaces option under the
 repository's **Code** button. Then:
@@ -588,7 +588,7 @@ BASE_URL=… API_KEY=uik_… RECIPIENT=… npx tsx scripts/double-tap.ts
 | Name | Convex deployment | Purpose |
 |---|---|---|
 | dev | `judicious-wildcat-326` | Local development |
-| deployed | `scintillating-moose-307` | Submitted deployment |
+| deployed | `scintillating-moose-307` | Live deployment |
 
 ```bash
 pnpm deploy:deployed
