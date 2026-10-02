@@ -24,9 +24,6 @@ Unified Inbox: search Gmail, Slack and the web from one place, and send
 replies only after an explicit confirm step. The adapter layer and the safe-send
 gate are the centerpiece — a standalone module with the UI as a pure consumer.
 
-Full brief in [`assessment-unified-inbox.pdf`](assessment-unified-inbox.pdf) —
-read it before changing an interface, an endpoint path or a `Result` field.
-
 Stack: Next.js 16 (App Router, Turbopack) + Tailwind 4, Convex backend, Clerk
 auth, pnpm, TypeScript — and **never leave an `any`** in committed code.
 
@@ -44,8 +41,8 @@ Convex only has the deployment *types* `dev` and `prod`, so the deployed
 deployment **is** the `prod` one and `--prod` targets it. That makes it Convex's
 production tier, not a production application.
 
-Treat the deployed environment as the deliverable: it must stay current with `main`
-and keep working real OAuth credentials, because a reviewer exercises it directly.
+Keep the deployed environment current with `main` and on working real OAuth
+credentials.
 Nothing else depends on it, so it is not "protected" — just don't leave it stale
 or half-migrated.
 
@@ -84,8 +81,7 @@ and friends stay sensitive; the server reads those at runtime and they never
 reach this machine. The script fails loudly if any of the three pulls empty.
 
 Two reasons it works this way. A push should be free — `staging` gets pushed
-often and mid-change, and none of those pushes are a deliverable. And the thing a
-reviewer opens should be a build somebody watched succeed, not one that a CI
+often and mid-change, and none of those pushes are a release. And what ships should be a build somebody watched succeed, not one that a CI
 runner did on their behalf while nobody was looking.
 
 `main` is the production branch, so that is what gets built and deployed. The

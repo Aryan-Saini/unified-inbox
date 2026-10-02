@@ -44,7 +44,7 @@ them in .env.deploy at the repo root (git-ignored) or export them in the shell:
              inbox you can actually open, because the last assertion is you
              looking at it.
   APP_URL    optional. The deployed Vercel URL, e.g.
-             https://unified-inbox-assessment.vercel.app. Given it, the docs
+             https://<your-app>.vercel.app. Given it, the docs
              surface is checked too; without it, that check is skipped.
   N          optional, default 10. How many parallel sends the double-tap fires.
 

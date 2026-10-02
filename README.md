@@ -1,10 +1,10 @@
 # Unified Inbox
 
-Search Gmail, Slack and the web from one place.
+Search Gmail, Slack and the web from one place, and reply without ever
+double-sending. A side project built on Next.js and Convex.
 
 | | |
 | --- | --- |
-| **Deployed app** | **https://unified-inbox-assessment.vercel.app** — the live app, real Gmail and Slack OAuth, on Vercel |
 | **Demo video** | **https://www.youtube.com/watch?v=lyPEjSdJe1U** — a walkthrough of the product |
 | Frontend | Next.js 16 (App Router, Turbopack) + Tailwind 4 |
 | Backend, DB, scheduler, cron | Convex |
@@ -20,15 +20,10 @@ Search Gmail, Slack and the web from one place.
 | `/` | Redirects to whichever of these you belong on |
 
 The Convex backend is what the REST API and the OAuth callbacks live on, so its
-base URL is separate from the app's. There are two, and every `curl` example in
-this README takes one of them:
+base URL (`https://<deployment>.convex.site`) is separate from the app's. It is
+`NEXT_PUBLIC_CONVEX_SITE_URL` in `.env.local`, and every `curl` example in this
+README takes it.
 
-| Convex deployment | Base URL | Used by |
-| --- | --- | --- |
-| deployed | `https://scintillating-moose-307.convex.site` | The deployed Vercel app above. Use this to exercise the REST API against the live deployment |
-| dev | `https://judicious-wildcat-326.convex.site` | Local and Codespaces. It is `NEXT_PUBLIC_CONVEX_SITE_URL` in `.env.local` |
-
-- [Reviewer login](#reviewer-login)
 - [Architecture](#architecture)
 - [Local setup](#local-setup)
 - [GitHub Codespaces](#github-codespaces)
@@ -39,18 +34,6 @@ this README takes one of them:
 - [Tests](#tests)
 - [Deployments](#deployments)
 - [Known limits](#known-limits)
-
----
-
-## Reviewer login
-
-The same test account works on both the [deployed Vercel app](https://unified-inbox-assessment.vercel.app)
-and a local or Codespaces copy:
-
-- Email: `test+clerk_test@test.com`
-- Verification code: `424242`
-
-This uses Clerk's documented [test email and verification-code flow](https://clerk.com/docs/guides/development/testing/test-emails-and-phones).
 
 ---
 
@@ -69,10 +52,10 @@ REST API / curl ───┘
 
 `app/(inbox)/` is just the frontend. To try the `curl` version, create an API key
 under Settings → API keys, then provide the base URL, key, and recipient. The
-base URL is either Convex base URL from the table at the top:
+base URL is your Convex site URL:
 
 ```bash
-UNIFIED_INBOX_BASE_URL=https://scintillating-moose-307.convex.site \
+UNIFIED_INBOX_BASE_URL=https://<deployment>.convex.site \
 UNIFIED_INBOX_API_KEY=uik_… \
 UNIFIED_INBOX_RECIPIENT=you@example.com ./docs/api-walkthrough.sh
 ```
@@ -80,7 +63,7 @@ UNIFIED_INBOX_RECIPIENT=you@example.com ./docs/api-walkthrough.sh
 ### The adapter contract
 
 Every provider uses the same `SearchAdapter` and returns the same seven-field
-`Result` from the brief. This lets the app merge results without knowing whether
+`Result` shape. This lets the app merge results without knowing whether
 they came from Gmail, Slack, or the web. Each adapter only receives what it needs
 to search, such as a valid access token, scopes, and a result limit.
 
@@ -88,7 +71,7 @@ The original result shape was too limited for the UI. With multiple accounts and
 Slack workspaces connected, it was hard to tell where a result came from or who
 wrote it. I added optional `ResultExtras` for details such as profile pictures,
 workspace names, and sender information. The UI can use those details, while the
-REST API still returns exactly the seven fields required by the brief.
+REST API still returns exactly the same seven `Result` fields.
 
 ### Search fan-out
 
@@ -339,9 +322,9 @@ repository's **Code** button. Then:
 
 1. Sign in to GitHub and click **Create codespace**.
 2. Wait for the automatic dependency installation to finish.
-3. Upload the provided `.env.reviewer` file and rename it to `.env.local`.
+3. Create `.env.local` with your Clerk keys (see [Local setup](#local-setup)).
 4. Run `pnpm dev` and open forwarded port 3000.
-5. Sign in with the [reviewer account](#reviewer-login).
+5. Sign in at `/auth`.
 
 If you instead store
 `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`, and
@@ -513,7 +496,7 @@ npx convex env set ALLOW_FAULT_INJECTION true
 4. Send the key as a bearer token:
 
 ```bash
-API=https://scintillating-moose-307.convex.site/api/v1
+API=https://<deployment>.convex.site/api/v1
 KEY=uik_…
 
 curl -H "Authorization: Bearer $KEY" "$API/connections"
@@ -556,7 +539,7 @@ All errors use:
 Requires `curl`, `python3`, a created API key, and a recipient:
 
 ```bash
-UNIFIED_INBOX_BASE_URL=https://scintillating-moose-307.convex.site \
+UNIFIED_INBOX_BASE_URL=https://<deployment>.convex.site \
 UNIFIED_INBOX_API_KEY=uik_… \
 UNIFIED_INBOX_RECIPIENT=you@example.com ./docs/api-walkthrough.sh
 ```
@@ -609,7 +592,7 @@ For the combined deploy, create `.env.deploy`:
 CONVEX_DEPLOY_KEY=prod:scintillating-moose-307|…
 SMOKE_API_KEY=uik_…
 SMOKE_RECIPIENT=you@example.com
-SMOKE_APP_URL=https://unified-inbox-assessment.vercel.app
+SMOKE_APP_URL=https://<your-app>.vercel.app
 ```
 
 The frontend deploy is manual. Pushing to GitHub does not deploy it.
